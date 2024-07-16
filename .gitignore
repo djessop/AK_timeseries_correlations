@@ -1,3 +1,8 @@
-analysis/*
-__pycache__/*
-thesis/*
+analysis/
+__pycache__/
+thesis/
+code/.ipynb_checkpoints/
+code/CO2_heat_flux.*
+code/fitting.*
+data/
+thesis/

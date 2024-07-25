@@ -1,0 +1,83 @@
+\documentclass{standalone} % [portrait]{article} 
+
+\usepackage{pgfplots, 
+  pgfplotstable,
+  booktabs,
+  amsmath,
+  amsbsy,
+  amssymb,
+  natbib}
+
+%\usepackage[margin=1cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\pagestyle{empty}
+
+\pgfplotsset{compat=1.6}
+
+\begin{document}
+
+\pgfkeys{
+  /pgf/number format/.cd,
+  sci,
+  sci generic={mantissa sep=\times,exponent={10^{#1}}}
+}
+
+\pgfplotstableset{
+  columns/SP/.style={
+    column name={SP},
+    int detect,
+    column type=r,
+  },
+  %% columns/start/.style={
+  %%   column name={Start date},
+  %%   column type=c,
+  %%   string type,
+  %% },
+  %% columns={Name,unc age},
+  columns/daterange/.style={
+    column name={Date range},
+    column type=c,
+    string type,
+    empty cells with={\textquotedbl},
+  },
+  %% columns/end/.style={
+  %%   column name={End date},
+  %%   column type=c,
+  %%   string type,
+  %% },
+  columns/max_correlation/.style={
+    column name={Max. corr. coeff.},
+    fixed, fixed zerofill, precision=3,
+    column type=r,
+  },
+  columns/lag_max_correlation/.style={
+    column name={Lag at max.\ corr.},
+    fixed, fixed zerofill, precision=0,
+    column type=r,
+    zerofill,
+    multicolumn names={c},
+  },
+  col sep=comma,                        % Semicolon separated data file
+  empty cells with={\textquotedbl},     % replace empty cells with '--'
+  every head row/.style={before row=\toprule,
+    after row=\midrule,
+  },
+  every last row/.style={after row=\bottomrule},
+}
+ 
+\pgfplotstabletypeset[
+  create on use/daterange/.style={
+    create col/assign/.code={%
+      \edef\entry{\thisrow{start}--\thisrow{end}}
+      \pgfkeyslet{/pgfplots/table/create col/next content}{\entry}
+    }
+  },
+  col sep=comma,
+  columns={daterange, SP, max_correlation, lag_max_correlation},
+  outfile=rain-SP-correlations-by-period.out.tex
+]
+{rain-SP-correlations-by-period-mod.csv}
+
+
+\end{document}

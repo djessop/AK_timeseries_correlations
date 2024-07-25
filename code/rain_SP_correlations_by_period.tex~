@@ -1,0 +1,197 @@
+\documentclass[landscape]{article} %{standalone}
+
+\usepackage{pgfplots, 
+  pgfplotstable,
+  booktabs,
+  amsmath,
+  amsbsy,
+  amssymb,
+  natbib}
+
+\input{../commands}
+
+\pagestyle{empty}
+
+\pgfplotsset{compat=1.6}
+
+\begin{document}
+
+% Read data
+%\pgfplotstableread{experiments-log-2D.csv}\data
+
+\pgfkeys{
+  /pgf/number format/.cd,
+  sci,
+  sci generic={mantissa sep=\times,exponent={10^{#1}}}
+}
+
+\begin{table}
+  \begin{center}
+
+\pgfplotstableset{
+  columns/Expt no/.style={
+    column name={Expt.},
+    int detect,
+    column type=r,
+  },
+  colunmns/Date/.style={
+    column name={Date},
+    column type=c,
+    string type,
+  },
+  columns/phi_1/.style={
+    %sci, sci zerofill, sci precision=2,
+    fixed, fixed zerofill, precision=4,
+    %dec sep align,
+    column type=c,
+    %sci generic={mantissa sep={\times},exponent={10^{#1}}},
+    column name={$\phi_1$},
+  },
+  columns/phi_2/.style={
+    %sci, sci zerofill, sci precision=2,
+    fixed, fixed zerofill, precision=4,
+    %dec sep align,
+    column type=c,
+    %sci generic={mantissa sep={\times},exponent={10^{#1}}},
+    column name={$\phi_2$},
+  },
+  columns/phi/.style={
+    %sci, sci zerofill, sci precision=2,
+    fixed, fixed zerofill, precision=4,
+    %dec sep align,
+    column type=c,
+    %sci generic={mantissa sep={\times},exponent={10^{#1}}},
+    column name={$\phi_0$},
+  },
+  columns/rho_0/.style={
+    %fixed, dec sep align,
+    fixed, fixed zerofill, precision=0,
+    column type=r,
+    zerofill,
+    precision=3,
+    multicolumn names={c},
+    column name={\centering{$\rho_0$}},%/[g/cm$^3$]},
+  },
+  columns/rhob/.style={
+    %dec sep align,
+    fixed, fixed zerofill, precision=4,
+    column type=r,
+    zerofill,
+    precision=3,
+    multicolumn names={c},
+    column name={\centering{$\rho_b$}},%/[g/cm$^3$]},
+  },
+  columns/gprime_0/.style={
+    %dec sep align,
+    fixed, fixed zerofill, precision=4,
+    column type=r,
+    zerofill,
+    precision=3,
+    multicolumn names={c},
+    column name={\centering{$g'_0$}},%/[g/cm$^3$]},
+  },
+  columns/Q0/.style={
+    %dec sep align,
+    %int detect,
+    fixed, fixed zerofill, precision=2,
+    column type=r,
+    zerofill,
+    multicolumn names={c},
+    column name={$q_0$},%/[cm$^3$/s]},
+  },
+  columns/M0/.style={
+    %dec sep align,
+    fixed, fixed zerofill, precision=2,
+    column type=r,
+    zerofill,
+    multicolumn names={c},
+    column name={$m_0$},%/[cm$^4$/s$^2$]},
+  },
+  columns/F0/.style={
+    %dec sep align,
+    fixed, fixed zerofill, precision=2,
+    column type=r,
+    zerofill,
+    multicolumn names={c},
+    column name={$f_0$},%/[cm$^4$/s$^3$]},
+  },
+  columns/N/.style={
+    %dec sep align,
+    fixed, fixed zerofill, precision=2,    
+    column type=r,
+    zerofill,
+    multicolumn names={c},
+    column name={$N$},%=-g/\rho_0 \partial_z \rho_a$},%/[1/s]},
+  },
+  columns/Re0/.style={
+    %dec sep align,
+    fixed, fixed zerofill, precision=0,
+    column type=r,
+    zerofill,
+    multicolumn names={c},
+    column name={$\mathrm{Re}_0$},
+  },
+  columns/Ri0/.style={
+    %dec sep align,
+    %fixed, fixed zerofill, precision=4,
+    sci, sci zerofill, precision=2,
+    column type=r,
+    zerofill,
+    multicolumn names={c},
+    column name={$\mathrm{Ri}_0$},
+  },
+  columns/St_2/.style={
+    %dec sep align,
+    fixed, fixed zerofill, precision=2,
+    %sci, sci zerofill, precision=2,
+    column type=r,
+    zerofill,
+    multicolumn names={c},
+    column name={$\mathrm{St}_0$},
+  },
+  columns/S_2/.style={
+    %dec sep align,
+    fixed, fixed zerofill, precision=2,
+    %sci, sci zerofill, precision=2,
+    column type=r,
+    zerofill,
+    multicolumn names={c},
+    column name={$\Sigma_0$},
+  },
+  columns/S List 1982/.style={
+    %dec sep align,
+    column type=r,
+    zerofill,
+    multicolumn names={c},
+    column name={$\mathrm{S}_0$},%/[cm$^4$/s$^3$]},
+  },
+  columns/class/.style={
+    string type,
+    multicolumn names={c},
+    column name={Class},
+  },
+  col sep=semicolon,            % Semicolon separated data file
+  empty cells with={--},        % replace empty cells with '--'
+  every head row/.style={before row=\toprule,
+    after row={% & & & \multicolumn{1}{c}{[cm/s$^2$]} & \multicolumn{1}{c}{[cm$^3$/s]} & \multicolumn{1}{c}{[cm$^4$/s$^2$]} & \multicolumn{1}{c}{[cm$^4$/s$^3$]} & & \\
+      \midrule}
+  },
+  every last row/.style={after row=\bottomrule},
+}
+
+  \pgfplotstabletypeset[
+    %% row predicate/.code={%
+    %%   \pgfplotstablegetelem{#1}{num}\of{\data}
+    %%   \ifnum\pgfplotsretval=34\relax
+    %%   \ifnum\pgfplotsretval=35\relax
+    %%   \else\pgfplotstableuserowfalse\fi},
+    col sep=semicolon,
+    1000 sep={\,},
+    columns={Expt no, phi, Re0, St_2, S_2, Ri0},
+    outfile=experiments-log-2D-powerSpectra.out.tex]
+  {experiments-log-2D-powerSpectra.csv}
+
+  \end{center}
+\end{table}
+
+\end{document}

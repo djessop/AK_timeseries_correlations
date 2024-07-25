@@ -1,10 +1,10 @@
-analysis/
+analysis/*
 __pycache__/
-thesis/
+thesis/*
 code/.ipynb_checkpoints/
 code/CO2_heat_flux.*
 code/fitting.*
 code/gaussian.*
 code/outfile*
-data/
-thesis/
+data/*
+thesis/*

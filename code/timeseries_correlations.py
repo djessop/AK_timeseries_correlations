@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[54]:
 
 
 #!/usr/bin/env python3
@@ -12,6 +12,7 @@
 import numpy as np
 import scipy.signal
 import matplotlib.pyplot as plt
+import matplotlib.patheffects as pe
 
 from matplotlib.dates import DateFormatter, MonthLocator, DayLocator
 from matplotlib.ticker import MultipleLocator
@@ -413,7 +414,7 @@ fig.tight_layout()
 
 # The depth of the Tarissan lake is equivalent to the level below a reference point.  As the lowest depths (i.e. largest magnitude of the -vely signed data) correspond to the highest values of the GWL data.  Hence we take the -ve of the GWL signals in the following analyses
 
-# In[12]:
+# In[37]:
 
 
 ## simplified variables for ease of manipulation
@@ -611,7 +612,7 @@ plt.plot(lags[peaks_troughs], corr[peaks_troughs], 'ro')
 print(f"Peaks and troughs at: {lags[peaks_troughs]} days, with max at {lags[np.argmax(corr)]} days")
 
 
-# In[18]:
+# In[66]:
 
 
 from astropy.timeseries import LombScargle
@@ -621,7 +622,7 @@ y_ = detrend_normalise_data(y0)
 x_ = (x0 - x0.iloc[0]).dt.total_seconds().values
 dx = x_[1] - x_[0]
 fs = 1 / dx
-period = x_[-1] - x_[0]Lomb-Scargle
+period = x_[-1] - x_[0]
 fp = 1 / period
 ls = LombScargle(x_, y_)
 freq, power = ls.autopower(minimum_frequency=fp, 
@@ -634,7 +635,12 @@ days = [2, 4, 8, 16, 32]
 
 for day in days:
     f_day = 1 / (day * 24 * 3600)
-    plt.axvline(f_day, linestyle='-', c='r', zorder=1)
+    plt.axvline(f_day, linestyle='-', c='k', linewidth=.8, zorder=1);
+    plt.annotate(f'{day:2d} days', xy=(.8*f_day, 1e-5), xycoords='data', 
+                 rotation=90, zorder=9, color='k', fontsize='small',
+                 path_effects=[pe.withStroke(linewidth=1.5, foreground='w')])
+                 # bbox=dict(fc='w', ec='none', pad=.01, 
+                 #                                  alpha=.7, boxstyle='round,pad=.2'))
 
 plt.loglog(freq, power / power[0], '-', zorder=3, label='Lomb-Scargle')
 plt.loglog(f_p, p_p / p_p[1], '-', zorder=3, label="Periodogram")
